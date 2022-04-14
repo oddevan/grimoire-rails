@@ -1,4 +1,6 @@
 class CardSet < ApplicationRecord
+	has_many :printings
+	
 	validates :name, presence: true
 	validates :slug, presence: true, format: { with: /\A[0-9a-z\-]+\z/ }, uniqueness: true
 

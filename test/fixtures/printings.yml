@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+normal:
+  name: Garchomp
+  grimoire_id: pkm-brs-109
+  tcgplayer_sku: 5449868
+  card_set: brs
+  signature_data: {"name":"Garchomp","type":"Dragon","data":[{"cost":"WF","name":"Dragonblade ","base_damage":"160"}]}
+  signature: a3d365db82d5df7ae64c87e6c022bf29
+  sequence: 109
+
+trainergallery:
+  name: Umbreon VMAX
+  grimoire_id: pkm-brs-tg23
+  tcgplayer_sku: 5459963
+  card_set: brs
+  signature_data: {"name":"Umbreon VMAX","type":"Darkness","data":[{"cost":"2D","name":"Max Darkness ","base_damage":"160"}]}
+  signature: 757e1d935414cc6e1c1fcd469a4030eb
+  sequence: tg23
