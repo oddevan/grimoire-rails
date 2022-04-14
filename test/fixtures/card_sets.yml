@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+brs:
+  name: Brilliant Stars
+  slug: brilliant-stars
+  release_date: 2022-03-13
+
+fus:
+  name: Fusion Strike
+  slug: fusion-strike
+  release_date: 2022-01-08
