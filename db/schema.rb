@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_14_015052) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_15_015433) do
   create_table "card_sets", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -30,11 +30,27 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_14_015052) do
     t.string "sequence"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_url"
     t.index ["card_set_id"], name: "index_printings_on_card_set_id"
     t.index ["grimoire_id"], name: "index_printings_on_grimoire_id", unique: true
     t.index ["sequence"], name: "index_printings_on_sequence"
     t.index ["signature"], name: "index_printings_on_signature"
   end
 
+  create_table "staging_printings", force: :cascade do |t|
+    t.string "name"
+    t.string "grimoire_id"
+    t.integer "tcgplayer_sku"
+    t.integer "card_set_id"
+    t.string "signature_data"
+    t.string "signature"
+    t.string "sequence"
+    t.string "image_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_set_id"], name: "index_staging_printings_on_card_set_id"
+  end
+
   add_foreign_key "printings", "card_sets"
+  add_foreign_key "staging_printings", "card_sets"
 end
