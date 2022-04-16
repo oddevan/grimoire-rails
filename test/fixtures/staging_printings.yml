@@ -4,7 +4,6 @@ one:
   name: MyString
   grimoire_id: MyString
   tcgplayer_sku: 1
-  card_set: one
   signature_data: MyString
   signature: MyString
   sequence: MyString
@@ -14,7 +13,6 @@ two:
   name: MyString
   grimoire_id: MyString
   tcgplayer_sku: 1
-  card_set: two
   signature_data: MyString
   signature: MyString
   sequence: MyString

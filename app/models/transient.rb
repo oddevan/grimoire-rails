@@ -7,9 +7,12 @@ class Transient < ApplicationRecord
 		return result.expiration < Time.now ? nil : result.value
 	end
 
-	def self.set(key, value)
+	def self.set(key, value, expiration)
+		return false unless key && expiration
+
 		entry = self.find_by_key(key) || self.new(key: key)
 		entry.value = value
+		entry.expiration = expiration
 		entry.save
 	end
 end
