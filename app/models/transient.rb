@@ -4,6 +4,7 @@ class Transient < ApplicationRecord
 
 	def self.get(key)
 		result = self.find_by_key(key)
+		return nil if result.nil?
 		return result.expiration < Time.now ? nil : result.value
 	end
 
