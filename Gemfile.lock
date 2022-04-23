@@ -183,6 +183,7 @@ DEPENDENCIES
   rails (~> 7.0.2, >= 7.0.2.3)
   rest-client
   sqlite3 (~> 1.4)
+  thor (~> 1.2)
   tzinfo-data
 
 RUBY VERSION
