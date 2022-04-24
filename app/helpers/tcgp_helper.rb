@@ -1,7 +1,7 @@
 require 'rest-client'
 require 'json'
 
-class TCGplayer
+class TcgpHelper
 	def initialize
 		@access_key = self.get_access_key
 	end
