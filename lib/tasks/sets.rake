@@ -16,8 +16,9 @@ namespace :sets do
       puts "Need a set ID and prefix!\nUsage: rails \"sets:import[1234,brs]\""
       exit
     end
-    puts "Importing #{args.all ? 'ALL' : 'NEW'} from TCGplayer set #{args.set_id} with prefix '#{args.prefix}'."
+    do_all = args.all || false
+    puts "Importing #{do_all ? 'ALL' : 'NEW'} from TCGplayer set #{args.set_id} with prefix '#{args.prefix}'."
 
-
+    Import::SetImporter.new(TcgplayerHelper.new).import_set args.set_id, prefix: args.prefix, get_all: do_all
   end
 end

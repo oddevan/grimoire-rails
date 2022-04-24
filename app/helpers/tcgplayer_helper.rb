@@ -1,6 +1,14 @@
 require 'rest-client'
 require 'json'
 
+class TcgplayerException < RuntimeError
+	attr :http_response
+
+	def initialize(response)
+		@http_response = response
+	end
+end
+
 class TcgplayerHelper
 	def initialize
 		@access_key = self.get_access_key
@@ -76,9 +84,7 @@ class TcgplayerHelper
 
 		response_body = JSON.parse response.body
 		unless [200, 201].include? response.code
-			raise "Errors from TCGplayer: #{response_body['errors'].join(', ')}\n" +
-				"  Endpoint: #{response.request.url}\n" +
-				"  Headers:  #{response.request.headers}"
+			raise TcgplayerException.new(response), "Errors from TCGplayer: #{response_body['errors'].join(', ')}"
 		end
 
 		return response_body['results']
