@@ -12,4 +12,14 @@ namespace :sets do
     end
   end
 
+  desc "Import the given set to staging"
+  task :import, [:set_id, :prefix, :all] => [:environment] do |task, args|
+    if !args.set_id || !args.prefix
+      puts "Need a set ID and prefix!\nUsage: rails \"sets:import[1234,brs]\""
+      exit
+    end
+    puts "Importing #{args.all ? 'ALL' : 'NEW'} from TCGplayer set #{args.set_id} with prefix '#{args.prefix}'."
+
+    
+  end
 end
