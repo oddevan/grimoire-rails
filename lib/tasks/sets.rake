@@ -1,9 +1,7 @@
-import File.join(Rails.root, 'lib', 'tcgplayer.rb')
-
 namespace :sets do
   desc "Get list of sets and IDs from TCGplayer"
   task list: [:environment] do
-    helper = TCGplayer.new
+    helper = TcgplayerHelper.new
     sets = helper.sets
 
     puts "groupId\tname\tisSupplemental"
@@ -20,6 +18,6 @@ namespace :sets do
     end
     puts "Importing #{args.all ? 'ALL' : 'NEW'} from TCGplayer set #{args.set_id} with prefix '#{args.prefix}'."
 
-    
+
   end
 end
