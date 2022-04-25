@@ -1,7 +1,7 @@
 namespace :sets do
   desc "Get list of sets and IDs from TCGplayer"
   task list: [:environment] do
-    helper = TcgplayerHelper.new
+    helper = Tcgplayer::ApiClient.new
     sets = helper.sets
 
     puts "groupId\tname\tisSupplemental"
@@ -19,6 +19,11 @@ namespace :sets do
     do_all = args.all || false
     puts "Importing #{do_all ? 'ALL' : 'NEW'} from TCGplayer set #{args.set_id} with prefix '#{args.prefix}'."
 
-    Import::SetImporter.new(TcgplayerHelper.new).import_set args.set_id, prefix: args.prefix, get_all: do_all
+    importer = Import::SetImporter.new(
+      fetcher: Tcgplayer::ApiClient.new,
+      parser_class: Tcgplayer::CardParser,
+      model_class: StagingPrinting,
+    )
+    importer.import_set args.set_id, prefix: args.prefix, get_all: do_all
   end
 end
