@@ -1,11 +1,17 @@
 module Import
 	class SetImporter
-		def initialize(fetcher)
+		# Required interfaces:
+		#   fetcher.cards_from_set(set_id, quantity:, offset:)
+		#   parser_class.new(card_data).hash_for_model
+		#   model_class.new(hash_for_model).save
+		def initialize(fetcher:, parser_class:, model_class:)
 			if !fetcher.respond_to?(:cards_from_set)
 				raise ArgumentError, "Fetcher needs to respond to :cards_from_set"
 			end
 
 			@fetcher = fetcher
+			@parser_class = parser_class
+			@model_class = model_class
 		end
 
 		def import_set(set_id, prefix: nil, get_all: false, batch_quantity: 100)
@@ -17,17 +23,13 @@ module Import
 			card_batch = @fetcher.cards_from_set set_id, quantity: batch_quantity
 			while (card_batch.any?)
 				card_batch.each do |card|
-					#import card
+					parser = @parser_class.new(card)
+					model = @model_class.new(parser.hash_for_model)
+					model.save
 				end
 
 				batch_offset += batch_quantity
-				begin
-					card_batch = @fetcher.cards_from_set set_id, quantity: batch_quantity, offset: batch_offset
-				rescue TcgplayerException => e
-					# If it's a 404 error here, that just means there's none left. Move along.
-					raise unless e.http_response.code == 404
-					card_batch = []
-				end
+				card_batch = @fetcher.cards_from_set set_id, quantity: batch_quantity, offset: batch_offset
 			end
 		end
 	end
