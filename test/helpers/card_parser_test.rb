@@ -34,6 +34,10 @@ class CardParserTest < ActiveSupport::TestCase
 		@promo_scorbunny ||= JSON.parse '{"productId":200301,"name":"Scorbunny - SWSH002","cleanName":"Scorbunny SWSH002","imageUrl":"https://tcgplayer-cdn.tcgplayer.com/product/200301_200w.jpg","categoryId":3,"groupId":2545,"url":"https://www.tcgplayer.com/product/200301/pokemon-swsh-sword-and-shield-promo-cards-scorbunny-swsh002","modifiedOn":"2021-10-05T13:11:59.5","skus":[{"skuId":4229619,"productId":200301,"languageId":1,"printingId":11,"conditionId":1},{"skuId":4229620,"productId":200301,"languageId":1,"printingId":11,"conditionId":2},{"skuId":4229621,"productId":200301,"languageId":1,"printingId":11,"conditionId":3},{"skuId":4229622,"productId":200301,"languageId":1,"printingId":11,"conditionId":4},{"skuId":4229623,"productId":200301,"languageId":1,"printingId":11,"conditionId":5}],"imageCount":1,"presaleInfo":{"isPresale":false,"releasedOn":null,"note":null},"extendedData":[{"name":"Number","displayName":"Card Number","value":"SWSH002"},{"name":"Rarity","displayName":"Rarity","value":"Promo"},{"name":"Card Type","displayName":"Card Type","value":"Fire"},{"name":"HP","displayName":"HP","value":"60"},{"name":"Stage","displayName":"Stage","value":"Basic"},{"name":"Attack 1","displayName":"Attack 1","value":"[R] Super Singe (10)\r\n<br>Flip a coin. If heads, your opponent\'s Active Pokemon is now Burned."},{"name":"Weakness","displayName":"Weakness","value":"Wx2"},{"name":"Resistance","displayName":"Resistance","value":"None"},{"name":"RetreatCost","displayName":"Retreat Cost","value":"1"}]}'
 	end
 
+	def trainergallery_umbreon
+		@trainergallery_umbreon ||= JSON.parse '{"productId":264206,"name":"Umbreon VMAX","cleanName":"Umbreon VMAX","imageUrl":"https://tcgplayer-cdn.tcgplayer.com/product/264206_200w.jpg","categoryId":3,"groupId":3020,"url":"https://www.tcgplayer.com/product/264206/pokemon-swsh09-brilliant-stars-trainer-gallery-umbreon-vmax","modifiedOn":"2022-02-25T05:03:23.55","skus":[{"skuId":5459963,"productId":264206,"languageId":1,"printingId":11,"conditionId":1},{"skuId":5459964,"productId":264206,"languageId":1,"printingId":11,"conditionId":2},{"skuId":5459965,"productId":264206,"languageId":1,"printingId":11,"conditionId":3},{"skuId":5459966,"productId":264206,"languageId":1,"printingId":11,"conditionId":4},{"skuId":5459967,"productId":264206,"languageId":1,"printingId":11,"conditionId":5}],"imageCount":1,"presaleInfo":{"isPresale":false,"releasedOn":"2022-02-25T00:00:00","note":null},"extendedData":[{"name":"Number","displayName":"Card Number","value":"TG23/TG30"},{"name":"Rarity","displayName":"Rarity","value":"Ultra Rare"},{"name":"Card Type","displayName":"Card Type","value":"Darkness"},{"name":"HP","displayName":"HP","value":"310"},{"name":"Stage","displayName":"Stage","value":"VMAX"},{"name":"CardText","displayName":"Card Text","value":"<strong>Ability — Dark Signal</strong>\r\n<br>When you play this Pokemon from your hand to evolve 1 of your Pokemon during your turn, you may switch 1 of your opponent\'s Benched Pokemon with their Active Pokemon."},{"name":"Attack 1","displayName":"Attack 1","value":"[2D] Max Darkness (160)"},{"name":"Weakness","displayName":"Weakness","value":"Gx2"},{"name":"Resistance","displayName":"Resistance","value":"None"},{"name":"RetreatCost","displayName":"Retreat Cost","value":"2"}]}'
+	end
+
 	test "GX card parses successfully" do
 		parser = Tcgplayer::CardParser.new(venusaur_snivey_gx)
 		parsed = parser.hash_for_model(set_key: "cme")
@@ -180,6 +184,21 @@ class CardParserTest < ActiveSupport::TestCase
     assert_equal 'swsh002', parsed[:sequence]
     assert_equal 'https://tcgplayer-cdn.tcgplayer.com/product/200301_200w.jpg', parsed[:image_url]
     assert_equal 200301, parsed[:tcgplayer_product]
+
+		assert_not parser.has_alt?
+	end
+
+	test "Trainer Gallery parses successfully" do
+		parser = Tcgplayer::CardParser.new(trainergallery_umbreon)
+		parsed = parser.hash_for_model(set_key: "brs")
+
+		assert_equal "pkm-brs-tg23", parsed[:grimoire_id]
+		assert_equal "Umbreon VMAX", parsed[:name]
+		assert_equal 5459963, parsed[:tcgplayer_sku]
+		assert_equal '{"name":"Umbreon VMAX","type":"Darkness","data":[{"cost":"2D","name":"Max Darkness ","base_damage":"160"}]}', parsed[:signature_data]
+		assert_equal 'tg023', parsed[:sequence]
+		assert_equal 'https://tcgplayer-cdn.tcgplayer.com/product/264206_200w.jpg', parsed[:image_url]
+		assert_equal 264206, parsed[:tcgplayer_product]
 
 		assert_not parser.has_alt?
 	end
