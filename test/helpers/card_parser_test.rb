@@ -38,6 +38,10 @@ class CardParserTest < ActiveSupport::TestCase
 		@trainergallery_umbreon ||= JSON.parse '{"productId":264206,"name":"Umbreon VMAX","cleanName":"Umbreon VMAX","imageUrl":"https://tcgplayer-cdn.tcgplayer.com/product/264206_200w.jpg","categoryId":3,"groupId":3020,"url":"https://www.tcgplayer.com/product/264206/pokemon-swsh09-brilliant-stars-trainer-gallery-umbreon-vmax","modifiedOn":"2022-02-25T05:03:23.55","skus":[{"skuId":5459963,"productId":264206,"languageId":1,"printingId":11,"conditionId":1},{"skuId":5459964,"productId":264206,"languageId":1,"printingId":11,"conditionId":2},{"skuId":5459965,"productId":264206,"languageId":1,"printingId":11,"conditionId":3},{"skuId":5459966,"productId":264206,"languageId":1,"printingId":11,"conditionId":4},{"skuId":5459967,"productId":264206,"languageId":1,"printingId":11,"conditionId":5}],"imageCount":1,"presaleInfo":{"isPresale":false,"releasedOn":"2022-02-25T00:00:00","note":null},"extendedData":[{"name":"Number","displayName":"Card Number","value":"TG23/TG30"},{"name":"Rarity","displayName":"Rarity","value":"Ultra Rare"},{"name":"Card Type","displayName":"Card Type","value":"Darkness"},{"name":"HP","displayName":"HP","value":"310"},{"name":"Stage","displayName":"Stage","value":"VMAX"},{"name":"CardText","displayName":"Card Text","value":"<strong>Ability — Dark Signal</strong>\r\n<br>When you play this Pokemon from your hand to evolve 1 of your Pokemon during your turn, you may switch 1 of your opponent\'s Benched Pokemon with their Active Pokemon."},{"name":"Attack 1","displayName":"Attack 1","value":"[2D] Max Darkness (160)"},{"name":"Weakness","displayName":"Weakness","value":"Gx2"},{"name":"Resistance","displayName":"Resistance","value":"None"},{"name":"RetreatCost","displayName":"Retreat Cost","value":"2"}]}'
 	end
 
+	def basic_energy
+		@basic_energy ||= JSON.parse '{"productId":264247,"name":"Grass Energy (2022 Unnumbered)","cleanName":"Grass Energy 2022 Unnumbered","imageUrl":"https://tcgplayer-cdn.tcgplayer.com/product/264247_200w.jpg","categoryId":3,"groupId":2948,"url":"https://www.tcgplayer.com/product/264247/pokemon-swsh09-brilliant-stars-grass-energy-2022-unnumbered","modifiedOn":"2022-02-25T05:03:23.55","skus":[{"skuId":5460174,"productId":264247,"languageId":1,"printingId":10,"conditionId":1},{"skuId":5460175,"productId":264247,"languageId":1,"printingId":10,"conditionId":2},{"skuId":5460176,"productId":264247,"languageId":1,"printingId":10,"conditionId":3},{"skuId":5460177,"productId":264247,"languageId":1,"printingId":10,"conditionId":4},{"skuId":5460178,"productId":264247,"languageId":1,"printingId":10,"conditionId":5},{"skuId":5460179,"productId":264247,"languageId":1,"printingId":77,"conditionId":1},{"skuId":5460180,"productId":264247,"languageId":1,"printingId":77,"conditionId":2},{"skuId":5460181,"productId":264247,"languageId":1,"printingId":77,"conditionId":3},{"skuId":5460182,"productId":264247,"languageId":1,"printingId":77,"conditionId":4},{"skuId":5460183,"productId":264247,"languageId":1,"printingId":77,"conditionId":5}],"imageCount":1,"presaleInfo":{"isPresale":false,"releasedOn":"2022-02-25T00:00:00","note":null},"extendedData":[{"name":"Rarity","displayName":"Rarity","value":"Common"},{"name":"Card Type","displayName":"Card Type","value":"Basic Grass Energy"}]}'
+	end
+
 	test "GX card parses successfully" do
 		parser = Tcgplayer::CardParser.new(venusaur_snivey_gx)
 		parsed = parser.hash_for_model(set_key: "cme")
@@ -201,5 +205,11 @@ class CardParserTest < ActiveSupport::TestCase
 		assert_equal 264206, parsed[:tcgplayer_product]
 
 		assert_not parser.has_alt?
+	end
+
+	test "Basic energy is not a card" do
+		parser = Tcgplayer::CardParser.new(basic_energy)
+
+		assert_not parser.has_card?
 	end
 end
