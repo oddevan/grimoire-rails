@@ -5,7 +5,7 @@ module Tcgplayer
 			@parsed = {
 				name: @raw['name'],
 				product_id: @raw['productId'],
-				image_url: @raw['imageUrl']
+				image_url: @raw['imageUrl'],
 			}
 
 			parse_extended_info
@@ -24,6 +24,15 @@ module Tcgplayer
 				image_url: @parsed[:image_url],
 				tcgplayer_product: @parsed[:product_id],
 			}
+		end
+
+		def has_alt?
+			!@parsed[:parallel_sku].nil?
+		end
+
+		def alt_hash_for_model(set_key: nil)
+			hash = hash_for_model(set_key)
+			hash[:tcgplayer_sku] = @parsed[:parallel_sku]
 		end
 
 		private
@@ -108,14 +117,14 @@ module Tcgplayer
 
 		def parse_signature_info
 			@parsed[:sig_info] = {
-				name: normalize_title(@parsed[:name]),
+				name: normalize_title(@raw['name']),
 				type: @parsed[:type],
 				data: @parsed[:attacks] || @parsed[:text] || '',
 			}
 		end
 
 		def normalize_title(raw_title)
-			clean_title = raw_title
+			clean_title = raw_title.clone
 			if (clean_title.match?(/\s[\[\(][\w\s]+[\]\)]/))
 				# Replace any text inside (these) or [these] with nothing
 				clean_title[/\s[\[\(][\w\s]+[\]\)]/] = ""
