@@ -24,11 +24,13 @@ module Import
 			while (card_batch.any?)
 				card_batch.each do |card|
 					parser = @parser_class.new(card)
-					model = @model_class.new(parser.hash_for_model)
+					next unless parser.has_card?
+
+					model = @model_class.new(parser.hash_for_model(set_key: prefix))
 					model.save
 
 					if parser.has_alt?
-						alt_model = @model_class.new(parser.alt_hash_for_model)
+						alt_model = @model_class.new(parser.alt_hash_for_model(set_key: prefix))
 						alt_model.save
 					end
 				end

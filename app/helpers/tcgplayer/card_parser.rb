@@ -9,9 +9,18 @@ module Tcgplayer
 			}
 
 			parse_extended_info
-			parse_printings
-			parse_id_number
-			parse_signature_info
+
+			@has_card = !@parsed[:card_number].blank?
+
+			if @has_card
+				parse_printings
+				parse_id_number
+				parse_signature_info
+			end
+		end
+
+		def has_card?
+			@has_card
 		end
 
 		def hash_for_model(set_key: nil)
@@ -34,7 +43,7 @@ module Tcgplayer
 			alt_hash = hash_for_model(set_key: set_key)
 	
 			alt_hash[:name] << " (Reverse Holo)"
-			alt_hash[:grimoire_id] << "-r"
+			alt_hash[:grimoire_id] << "-r" unless set_key.nil?
 			alt_hash[:tcgplayer_sku] = @parsed[:parallel_sku]
 			alt_hash[:sequence] << "r"
 
