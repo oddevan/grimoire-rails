@@ -4,6 +4,7 @@ class Printing < ApplicationRecord
   validates :name, presence: true
   validates :grimoire_id, presence: true, format: { with: /\A[a-z]{3}-[a-z0-9]{3}-[0-9a-z\-]+\z/ }, uniqueness: true
   validates :tcgplayer_sku, numericality: { only_integer: true }, allow_blank: true
+  validates :tcgplayer_product, numericality: { only_integer: true }, allow_blank: true
   validates :card_set, presence: true
   validates :signature_data, presence: true
   validates :signature, presence: true
