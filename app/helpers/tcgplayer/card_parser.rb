@@ -20,7 +20,7 @@ module Tcgplayer
 				grimoire_id: set_key.nil? ? nil : "pkm-#{set_key}-#{@parsed[:id_number]}",
 				tcgplayer_sku: @parsed[:sku],
 				signature_data: JSON.generate(@parsed[:sig_info]),
-				sequence: format('%03d', @parsed[:sequence]),
+				sequence: @parsed[:sequence],
 				image_url: @parsed[:image_url],
 				tcgplayer_product: @parsed[:product_id],
 			}
@@ -59,21 +59,16 @@ module Tcgplayer
 		end
 
 		def parse_card_number(raw_card_number)
-			card_number = parse_sequence(raw_card_number)
+			card_number = raw_card_number.downcase.strip
+			if card_number.include? '/'
+				card_number.slice!(card_number.index('/'), card_number.length)
+			end
 			card_number.match(/([a-z]+)0+([1-9]+)/) do |matches|
 				return if matches.nil?
 				card_number = matches[1] + matches [2]
 			end
 			card_number.gsub!(/^0+/,'')
 			@parsed[:card_number] = card_number
-		end
-
-		def parse_sequence(raw_card_number)
-			card_number = raw_card_number.downcase.strip
-			if card_number.include? '/'
-				card_number.slice!(card_number.index('/'), card_number.length)
-			end
-			@parsed[:sequence] = card_number
 		end
 
 		def parse_attack(raw_text)
@@ -110,13 +105,17 @@ module Tcgplayer
 		######################
 
 		def parse_id_number
-			id_number = @parsed[:card_number]
+			id_number = @parsed[:card_number].clone
 
 			if (@raw['name'].end_with?(" [Staff]"))
 				id_number << "-s"
 			end
 
-			@parsed[:id_number] = id_number
+			@parsed[:id_number] = id_number.clone
+			
+			matches = id_number.match /\A([a-z]*)(\d+)-*([a-z]*)\z/
+
+			@parsed[:sequence] = matches[1] + matches[2].rjust(3, '0') + matches[3]
 		end
 
 		######################
@@ -134,6 +133,10 @@ module Tcgplayer
 			if (clean_title.match?(/\s[\[\(][\w\s]+[\]\)]/))
 				# Replace any text inside (these) or [these] with nothing
 				clean_title[/\s[\[\(][\w\s]+[\]\)]/] = ""
+			end
+			if clean_title.include? ' -'
+				# Chop off anything like ' - SWSH0001'
+				clean_title.slice!(clean_title.index(' -'), clean_title.length)
 			end
 			clean_title
 		end
