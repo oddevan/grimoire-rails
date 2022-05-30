@@ -31,8 +31,14 @@ module Tcgplayer
 		end
 
 		def alt_hash_for_model(set_key: nil)
-			hash = hash_for_model(set_key)
-			hash[:tcgplayer_sku] = @parsed[:parallel_sku]
+			alt_hash = hash_for_model(set_key: set_key)
+	
+			alt_hash[:name] << " (Reverse Holo)"
+			alt_hash[:grimoire_id] << "-r"
+			alt_hash[:tcgplayer_sku] = @parsed[:parallel_sku]
+			alt_hash[:sequence] << "r"
+
+			alt_hash
 		end
 
 		private
@@ -46,7 +52,7 @@ module Tcgplayer
 					parse_attack edat['value']
 				when 'Card Type'
 					@parsed[:type] = edat['value']
-				when 'Card Text'
+				when 'CardText'
 					@parsed[:text] = edat['value']
 				end
 			end
@@ -119,7 +125,7 @@ module Tcgplayer
 			@parsed[:sig_info] = {
 				name: normalize_title(@raw['name']),
 				type: @parsed[:type],
-				data: @parsed[:attacks] || @parsed[:text] || '',
+				data: @parsed[:attacks] || @parsed[:text] || "",
 			}
 		end
 
