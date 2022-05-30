@@ -2,11 +2,28 @@ module Tcgplayer
 	class CardParser
 		def initialize(raw_data)
 			@raw = raw_data
-			@parsed = Hash.new
+			@parsed = {
+				name: @raw['name'],
+				product_id: @raw['productId'],
+				image_url: @raw['imageUrl']
+			}
+
+			parse_extended_info
+			parse_printings
+			parse_id_number
+			parse_signature_info
 		end
 
-		def hash_for_model
-
+		def hash_for_model(set_key: nil)
+			{
+				name: @parsed[:name],
+				grimoire_id: set_key.nil? ? nil : "pkm-#{set_key}-#{@parsed[:id_number]}",
+				tcgplayer_sku: @parsed[:sku],
+				signature_data: JSON.generate(@parsed[:sig_info]),
+				sequence: format('%03d', @parsed[:sequence]),
+				image_url: @parsed[:image_url],
+				tcgplayer_product: @parsed[:product_id],
+			}
 		end
 
 		private
@@ -20,7 +37,7 @@ module Tcgplayer
 					parse_attack edat['value']
 				when 'Card Type'
 					@parsed[:type] = edat['value']
-				when
+				when 'Card Text'
 					@parsed[:text] = edat['value']
 				end
 			end
@@ -56,7 +73,8 @@ module Tcgplayer
 					:cost => matches[1] || 0,
 					:name => matches[2] || '',
 					:base_damage => matches[5] || 0,
-					:text => text_index ? stripped_text[text_index + 1, stripped_text.length] : '',
+					# Leave text off for now
+					# :text => text_index ? stripped_text[text_index + 1, stripped_text.length] : '',
 				}
 			end
 		end
@@ -76,7 +94,34 @@ module Tcgplayer
 
 		######################
 
+		def parse_id_number
+			id_number = @parsed[:card_number]
 
+			if (@raw['name'].end_with?(" [Staff]"))
+				id_number << "-s"
+			end
+
+			@parsed[:id_number] = id_number
 		end
+
+		######################
+
+		def parse_signature_info
+			@parsed[:sig_info] = {
+				name: normalize_title(@parsed[:name]),
+				type: @parsed[:type],
+				data: @parsed[:attacks] || @parsed[:text] || '',
+			}
+		end
+
+		def normalize_title(raw_title)
+			clean_title = raw_title
+			if (clean_title.match?(/\s[\[\(][\w\s]+[\]\)]/))
+				# Replace any text inside (these) or [these] with nothing
+				clean_title[/\s[\[\(][\w\s]+[\]\)]/] = ""
+			end
+			clean_title
+		end
+
 	end
 end
