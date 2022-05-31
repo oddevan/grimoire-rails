@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_31_212030) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_31_232953) do
   create_table "card_sets", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -34,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_31_212030) do
     t.datetime "updated_at", null: false
     t.string "image_url"
     t.integer "tcgplayer_product"
+    t.decimal "market_price"
     t.index ["card_set_id"], name: "index_printings_on_card_set_id"
     t.index ["grimoire_id"], name: "index_printings_on_grimoire_id", unique: true
     t.index ["sequence"], name: "index_printings_on_sequence"
