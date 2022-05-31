@@ -60,7 +60,7 @@ module Tcgplayer
 				when /\AAttack \d+\z/
 					parse_attack edat['value']
 				when 'Card Type'
-					@parsed[:type] = edat['value']
+					@parsed[:type] = get_type edat['value']
 				when 'CardText'
 					@parsed[:text] = edat['value']
 				end
@@ -96,6 +96,15 @@ module Tcgplayer
 					# :text => text_index ? stripped_text[text_index + 1, stripped_text.length] : '',
 				}
 			end
+		end
+
+		# TCGplayer has a tendency to use "Trainer" for some printings and "Supporter" for others.
+		def get_type(raw_type)
+			trainers = ["Supporter", "Item", "Stadium"]
+
+			return "Trainer" if trainers.include? raw_type
+
+			return raw_type
 		end
 
 		######################
