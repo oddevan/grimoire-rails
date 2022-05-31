@@ -42,6 +42,10 @@ class CardParserTest < ActiveSupport::TestCase
 		@basic_energy ||= JSON.parse '{"productId":264247,"name":"Grass Energy (2022 Unnumbered)","cleanName":"Grass Energy 2022 Unnumbered","imageUrl":"https://tcgplayer-cdn.tcgplayer.com/product/264247_200w.jpg","categoryId":3,"groupId":2948,"url":"https://www.tcgplayer.com/product/264247/pokemon-swsh09-brilliant-stars-grass-energy-2022-unnumbered","modifiedOn":"2022-02-25T05:03:23.55","skus":[{"skuId":5460174,"productId":264247,"languageId":1,"printingId":10,"conditionId":1},{"skuId":5460175,"productId":264247,"languageId":1,"printingId":10,"conditionId":2},{"skuId":5460176,"productId":264247,"languageId":1,"printingId":10,"conditionId":3},{"skuId":5460177,"productId":264247,"languageId":1,"printingId":10,"conditionId":4},{"skuId":5460178,"productId":264247,"languageId":1,"printingId":10,"conditionId":5},{"skuId":5460179,"productId":264247,"languageId":1,"printingId":77,"conditionId":1},{"skuId":5460180,"productId":264247,"languageId":1,"printingId":77,"conditionId":2},{"skuId":5460181,"productId":264247,"languageId":1,"printingId":77,"conditionId":3},{"skuId":5460182,"productId":264247,"languageId":1,"printingId":77,"conditionId":4},{"skuId":5460183,"productId":264247,"languageId":1,"printingId":77,"conditionId":5}],"imageCount":1,"presaleInfo":{"isPresale":false,"releasedOn":"2022-02-25T00:00:00","note":null},"extendedData":[{"name":"Rarity","displayName":"Rarity","value":"Common"},{"name":"Card Type","displayName":"Card Type","value":"Basic Grass Energy"}]}'
 	end
 
+	def arceus_double_secret
+		@arceus_double_secret ||= JSON.parse '{"productId":263896,"name":"Arceus VSTAR (Secret) (176)","cleanName":"Arceus VSTAR Secret 176","imageUrl":"https://tcgplayer-cdn.tcgplayer.com/product/263896_200w.jpg","categoryId":3,"groupId":2948,"url":"https://www.tcgplayer.com/product/263896/pokemon-swsh09-brilliant-stars-arceus-vstar-secret-176","modifiedOn":"2022-04-27T13:11:00.36","skus":[{"skuId":5450378,"productId":263896,"languageId":1,"printingId":11,"conditionId":1},{"skuId":5450379,"productId":263896,"languageId":1,"printingId":11,"conditionId":2},{"skuId":5450380,"productId":263896,"languageId":1,"printingId":11,"conditionId":3},{"skuId":5450381,"productId":263896,"languageId":1,"printingId":11,"conditionId":4},{"skuId":5450382,"productId":263896,"languageId":1,"printingId":11,"conditionId":5}],"imageCount":1,"presaleInfo":{"isPresale":false,"releasedOn":null,"note":null},"extendedData":[{"name":"Number","displayName":"Card Number","value":"176/172"},{"name":"Rarity","displayName":"Rarity","value":"Ultra Rare"},{"name":"Card Type","displayName":"Card Type","value":"Colorless"},{"name":"HP","displayName":"HP","value":"280"},{"name":"Stage","displayName":"Stage","value":"VSTAR"},{"name":"CardText","displayName":"Card Text","value":"<span style=\"color:gold\"><strong>VSTAR Power</strong></span> Ability — Starbirth\r\n<br>During your turn, you may search your deck for up to 2 cards and put them into your hand. Then, shuffle your deck. <em>(You can\'t use more than 1 <strong>VSTAR</strong> Power in a game.)</em>"},{"name":"Attack 1","displayName":"Attack 1","value":"[3] Trinity Nova (200)\r\n<br>Search your deck for up to 3 basic Energy cards and attach them to your Pokemon V in anyway you like. Then, shuffle your deck."},{"name":"Weakness","displayName":"Weakness","value":"Fx2"},{"name":"Resistance","displayName":"Resistance","value":"None"},{"name":"RetreatCost","displayName":"Retreat Cost","value":"2"}]}'
+	end
+
 	test "GX card parses successfully" do
 		parser = Tcgplayer::CardParser.new(venusaur_snivey_gx)
 		parsed = parser.hash_for_model(set_key: "cme")
@@ -211,5 +215,20 @@ class CardParserTest < ActiveSupport::TestCase
 		parser = Tcgplayer::CardParser.new(basic_energy)
 
 		assert_not parser.has_card?
+	end
+
+	test "Handles multiple qualifiers" do
+		parser = Tcgplayer::CardParser.new(arceus_double_secret)
+		parsed = parser.hash_for_model(set_key: "brs")
+
+		assert_equal "pkm-brs-176", parsed[:grimoire_id]
+		assert_equal "Arceus VSTAR (Secret) (176)", parsed[:name]
+		assert_equal 5450378, parsed[:tcgplayer_sku]
+		assert_equal '{"name":"Arceus VSTAR","type":"Colorless","data":[{"cost":"3","name":"Trinity Nova ","base_damage":"200"}]}', parsed[:signature_data]
+		assert_equal '176', parsed[:sequence]
+		assert_equal 'https://tcgplayer-cdn.tcgplayer.com/product/263896_200w.jpg', parsed[:image_url]
+		assert_equal 263896, parsed[:tcgplayer_product]
+
+		assert_not parser.has_alt?
 	end
 end

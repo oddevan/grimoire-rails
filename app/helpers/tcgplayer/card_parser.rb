@@ -139,9 +139,9 @@ module Tcgplayer
 
 		def normalize_title(raw_title)
 			clean_title = raw_title.clone
-			if (clean_title.match?(/\s[\[\(][\w\s]+[\]\)]/))
+			if (clean_title.include? ' (')
 				# Replace any text inside (these) or [these] with nothing
-				clean_title[/\s[\[\(][\w\s]+[\]\)]/] = ""
+				clean_title.slice!(clean_title.index(' ('), clean_title.length)
 			end
 			if clean_title.include? ' -'
 				# Chop off anything like ' - SWSH0001'
