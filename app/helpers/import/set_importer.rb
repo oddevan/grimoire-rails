@@ -26,12 +26,10 @@ module Import
 					parser = @parser_class.new(card)
 					next unless parser.has_card?
 
-					model = @model_class.new(parser.hash_for_model(set_key: prefix))
-					model.save
+					model = @model_class.create(**parser.hash_for_model(set_key: prefix))
 
 					if parser.has_alt?
-						alt_model = @model_class.new(parser.alt_hash_for_model(set_key: prefix))
-						alt_model.save
+						@model_class.create(**parser.alt_hash_for_model(set_key: prefix))
 					end
 				end
 
