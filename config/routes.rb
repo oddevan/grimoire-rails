@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   
     root "info#index"
   
-    get 'build/routes/printings', to: 'printings#all_ids'
+    scope '/build' do
+      scope '/routes' do
+        get 'printings', to: 'printings#all_ids'
+        get 'sets', to: 'card_sets#all_slugs'
+      end
+    end
   end
 end
