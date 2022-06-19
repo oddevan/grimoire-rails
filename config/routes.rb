@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   
     root "info#index"
+
+    get 'printing/:grimoire_id', to: 'printings#show', grimoire_id: /[a-z]{3}-[a-z0-9]{3}-[0-9a-z\-]+/
   
     scope '/build' do
       scope '/routes' do
