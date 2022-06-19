@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   
     root "info#index"
 
-    get 'printing/:grimoire_id', to: 'printings#show', grimoire_id: /[a-z]{3}-[a-z0-9]{3}-[0-9a-z\-]+/
+    get 'printings/:grimoire_id', to: 'printings#show', grimoire_id: /[a-z]{3}-[a-z0-9]{3}-[0-9a-z\-]+/
+
+    get 'sets', to: 'card_sets#index'
+    get 'sets/:slug', to: 'card_sets#show', slug: /[0-9a-z\-]+/
   
     scope '/build' do
       scope '/routes' do
