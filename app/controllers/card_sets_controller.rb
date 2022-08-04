@@ -6,13 +6,15 @@ class CardSetsController < ApplicationController
 
 	def index
 		sets = CardSet.all
-		render json: sets.map { |s| {
-			name: s.name,
-			slug: s.slug,
-			release_date: s.release_date,
-			code: s.code,
-			guru_id: s.guru_id,
-		} }
+		render json: sets.map do |set|
+			{
+				name: set.name,
+				slug: set.slug,
+				release_date: set.release_date,
+				code: set.code,
+				guru_id: set.guru_id,
+			}
+		end
 	end
 
 	def show
