@@ -73,3 +73,5 @@ end
 
 # HTTP library for hitting TCGP APIs
 gem 'rest-client'
+
+gem "mysql2", "~> 0.5.4", :group => :production
