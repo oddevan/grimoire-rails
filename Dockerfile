@@ -1,13 +1,14 @@
 FROM ruby:3.1
-
-# throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
+ENV RAILS_ENV=production
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+	nodejs libmariadb-dev-compat libmariadb-dev \
+	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
-
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile* ./
 RUN bundle install
-
 COPY . .
 
-CMD ["bundle exec rails server"]
+EXPOSE 3000
+CMD "rails server"
