@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   
     root "info#index"
 
+    devise_for :users, controllers: { sessions: :sessions }, path_names: { sign_in: :login }
+    resource :user, only: [:show, :update]
+
     resources :printings, constraints: { id: /[a-z]{3}-[a-z0-9]{3}-[0-9a-z\-]+/ }, only: [:show] do
       member do
         get 'price'
