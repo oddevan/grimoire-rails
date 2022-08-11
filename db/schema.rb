@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_212609) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_11_230126) do
   create_table "card_sets", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -84,6 +84,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_212609) do
     t.string "display_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_admin", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
