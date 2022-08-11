@@ -75,3 +75,5 @@ end
 gem 'rest-client'
 
 gem "mysql2", "~> 0.5.4", :group => :production
+
+gem 'devise'

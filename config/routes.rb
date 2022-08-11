@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
-  defaults format: :json do
-    # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  
+  devise_for :users, controllers: {
+    confirmations: 'users/confirmations',
+    passwords: 'users/passwords',
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    unlocks: 'users/unlocks'
+  }
+
+  defaults format: :json do  
     root "info#index"
 
     resources :printings, constraints: { id: /[a-z]{3}-[a-z0-9]{3}-[0-9a-z\-]+/ }, only: [:show] do
