@@ -1,4 +1,4 @@
-class CardSetsController < ApplicationController
+class CardSetsController < ApplicationApiController
 	def all_slugs
 		sets = CardSet.select "slug"
 		render json: sets.map { |s| s.slug }

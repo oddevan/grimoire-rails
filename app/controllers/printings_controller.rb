@@ -1,4 +1,4 @@
-class PrintingsController < ApplicationController
+class PrintingsController < ApplicationApiController
 	def all_ids
 		printings = Printing.select "grimoire_id"
 		render json: printings.map { |p| p.grimoire_id }

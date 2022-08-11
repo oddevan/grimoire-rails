@@ -1,4 +1,4 @@
-class InfoController < ApplicationController
+class InfoController < ApplicationApiController
 	def index
 		render json: {
 			version: 1.0,
