@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Blank</title>
+    <title>Grimoire</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -22,10 +22,16 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3">
-          <% if notice %><p role="alert" class="alert alert-primary"><%= notice %></p><% end %>
-          <% if alert %><p role="alert" class="alert alert-danger"><%= alert %></p><% end %>
+          <% if flash[:notice].present? %><p role="alert" class="alert alert-primary"><%= flash[:notice] %></p><% end %>
+          <% if flash[:alert].present? %><p role="alert" class="alert alert-danger"><%= flash[:alert] %></p><% end %>
           <%= yield %>
         </div>
+      </div>
+    </div>
+    <div class="bg-light mt-5 p-3">
+      <div class="container text-end text-muted">
+        Grimoire is an <a class="text-reset fw-semibold text-decoration-none" href="https://www.oddevan.com/">oddEvan</a> project.
+        | <a class="text-reset fw-semibold text-decoration-none" href="https://www.oddevan.com/privacy-policy">Privacy Policy</a>
       </div>
     </div>
 

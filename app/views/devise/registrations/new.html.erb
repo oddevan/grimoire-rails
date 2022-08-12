@@ -21,6 +21,20 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
   </div>
 
+  <hr>
+
+  <div class="mb-3">
+    <%= f.label :username, class: "form-label" %>
+    <%= f.text_field :username, class: "form-control" %>
+    <span class="form-text">This will be in the URL of your profile.</span>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :display_name, class: "form-label" %>
+    <%= f.text_field :display_name, autocomplete: "name", class: "form-control" %>
+    <span class="form-text">This will be how your name is displayed on the site.</span>
+  </div>
+
   <div class="actions">
     <%= f.submit "Sign up", class: "btn btn-primary" %>
   </div>
