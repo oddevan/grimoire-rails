@@ -18,7 +18,7 @@ class CardSetsController < ApplicationApiController
 	end
 
 	def show
-		set = CardSet.find_by_slug(params.require(:slug))
+		set = CardSet.find_by_slug(params.require(:id))
 		render json: {
 			name: set.name,
 			slug: set.slug,

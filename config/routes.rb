@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users
 
   defaults format: :json do  
@@ -11,9 +12,13 @@ Rails.application.routes.draw do
       end
     end
 
-    get 'sets', to: 'card_sets#index'
-    get 'sets/:slug', to: 'card_sets#show', slug: /[0-9a-z\-]+/
-    get 'sets/:slug/cards', to: 'printings#by_set', slug: /[0-9a-z\-]+/
+    get 'users/me', to: 'info#me'
+
+    resources :sets, constraints: { id: /[0-9a-z\-]+/ }, only: [:index, :show] do
+      member do
+        get 'cards', to: 'printings#by_set'
+      end
+    end
   
     scope '/routes' do
       get 'printings', to: 'printings#all_ids'

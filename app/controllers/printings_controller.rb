@@ -28,7 +28,7 @@ class PrintingsController < ApplicationApiController
 	end
 
 	def by_set
-		set = CardSet.find_by_slug(params.require(:slug))
+		set = CardSet.find_by_slug(params.require(:id))
 		cards = Printing.where(card_set: set).map do |card|
 			{
 				id: card.grimoire_id,
