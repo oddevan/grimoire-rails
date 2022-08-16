@@ -6,14 +6,14 @@ class InfoController < ApplicationApiController
 			version: 2.0,
 			printings: Printing.count,
 			staging: StagingPrinting.count,
-			user: current_user.nil? ? "*anonymous" : current_user.username
+			user: current_resource_owner.nil? ? "*anonymous" : current_resource_owner.username
 		}
 	end
 
 	def me
 		render json: {
-			username: current_user.username,
-			displayName: current_user.display_name
+			username: current_resource_owner.username,
+			displayName: current_resource_owner.display_name
 		}
 	end
 end

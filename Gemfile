@@ -72,3 +72,4 @@ gem "mysql2", "~> 0.5.4", :group => :production
 
 gem 'devise'
 gem 'doorkeeper'
+gem 'rack-cors'
