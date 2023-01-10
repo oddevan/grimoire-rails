@@ -1,3 +1,9 @@
+# ARCHIVED #
+
+This particular fork is archived. It is preserved here for posterity and so I can reference a few things I learned in building it, but I ended up deciding on a different route for the backend.
+
+(Archived mostly so I stop getting Dependabot notices on it, so forkers should take note.)
+
 # Grimoire
 
 An app to track your Pokémon Trading Card Game collection.
